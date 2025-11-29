@@ -1,5 +1,9 @@
 import React from 'react';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from '../../src';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  geocodeByCoordinates,
+  getLatLng,
+} from '../../src';
 import { classnames } from '../helpers';
 
 class SearchBar extends React.Component {
@@ -23,11 +27,14 @@ class SearchBar extends React.Component {
     });
   };
 
-  handleSelect = selected => {
-    this.setState({ isGeocoding: true, address: selected });
-    geocodeByAddress(selected)
+  handleSelect = (address, placeId, info) => {
+    console.log({ address, placeId, info });
+    this.setState({ isGeocoding: true, address: address });
+    geocodeByAddress(address)
       .then(res => getLatLng(res[0]))
       .then(({ lat, lng }) => {
+        geocodeByCoordinates(lat, lng).then(res => console.log(res));
+
         this.setState({
           latitude: lat,
           longitude: lng,

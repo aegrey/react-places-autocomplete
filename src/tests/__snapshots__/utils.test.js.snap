@@ -66,6 +66,8 @@ Array [
 ]
 `;
 
+exports[`geocodeByCoordinates geocodes valid coordinates 1`] = `undefined`;
+
 exports[`geocodeByPlaceId geocode valid placeID 1`] = `
 Array [
   Object {

@@ -1,8 +1,9 @@
 {
-  "name": "react-places-autocomplete",
-  "version": "7.3.0",
+  "name": "@joshtwc/react-places-autocomplete",
+  "version": "7.4.2",
   "description": "A React component for Google Maps Places Autocomplete",
   "main": "dist/index.js",
+  "types": "./types.d.ts",
   "scripts": {
     "commit": "git-cz",
     "test": "jest /src",
@@ -29,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kenny-hibino/react-places-autocomplete.git"
+    "url": "https://github.com/joshtwc/react-places-autocomplete.git"
   },
   "keywords": [
     "React.js",
@@ -50,7 +51,8 @@
   ],
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "types.d.ts"
   ],
   "author": "Ken Hibino <ken.hibino7@gmail.com> (http://www.kenhibino.com/)",
   "license": "MIT",
@@ -59,6 +61,7 @@
   },
   "homepage": "https://github.com/kenny-hibino/react-places-autocomplete#readme",
   "devDependencies": {
+    "@types/react-places-autocomplete": "^7.2.14",
     "babel-cli": "^6.23.0",
     "babel-eslint": "8.2.2",
     "babel-jest": "22.4.3",
@@ -101,7 +104,7 @@
       "path": "node_modules/cz-conventional-changelog"
     },
     "ghooks": {
-      "pre-commit": "npm run test"
+      
     }
   },
   "babel": {

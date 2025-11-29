@@ -11,8 +11,8 @@ import { compose } from './helpers';
 
 // transform snake_case to camelCase
 const formattedSuggestion = structured_formatting => ({
-  mainText: structured_formatting.main_text,
-  secondaryText: structured_formatting.secondary_text,
+  mainText: structured_formatting.displayName,
+  secondaryText: structured_formatting.formattedAddress,
 });
 
 class PlacesAutocomplete extends React.Component {
@@ -67,7 +67,7 @@ class PlacesAutocomplete extends React.Component {
       );
     }
 
-    this.autocompleteService = new window.google.maps.places.AutocompleteService();
+    this.autocompleteService = window.google.maps.places.AutocompleteSuggestion;
     this.autocompleteOK = window.google.maps.places.PlacesServiceStatus.OK;
     this.setState(state => {
       if (state.ready) {
@@ -90,7 +90,7 @@ class PlacesAutocomplete extends React.Component {
         id: p.id,
         description: p.description,
         placeId: p.place_id,
-        active: highlightFirstSuggestion && idx === 0 ? true : false,
+        active: highlightFirstSuggestion && idx === 0,
         index: idx,
         formattedSuggestion: formattedSuggestion(p.structured_formatting),
         matchedSubstrings: p.matched_substrings,
@@ -104,13 +104,33 @@ class PlacesAutocomplete extends React.Component {
     const { value } = this.props;
     if (value.length) {
       this.setState({ loading: true });
-      this.autocompleteService.getPlacePredictions(
-        {
+      this.autocompleteService
+        .fetchAutocompleteSuggestions({
           ...this.props.searchOptions,
           input: value,
-        },
-        this.autocompleteCallback
-      );
+        })
+        .then(({ suggestions }) => {
+          const niceSuggestions = suggestions.map(({ placePrediction }, i) => ({
+            active: i === 0,
+            index: i,
+            formattedSuggestion: {
+              mainText: placePrediction.mainText.text,
+              secondaryText: placePrediction.secondaryText.text,
+            },
+            description: placePrediction.text.text,
+            placeId: placePrediction.placeId,
+            types: placePrediction.types,
+          }));
+
+          if (this.props.onSuggestions) {
+            this.props.onSuggestions(niceSuggestions);
+          }
+
+          this.setState({
+            loading: false,
+            suggestions: niceSuggestions,
+          });
+        });
     }
   };
 
@@ -376,13 +396,22 @@ PlacesAutocomplete.propTypes = {
   children: PropTypes.func.isRequired,
   onError: PropTypes.func,
   onSelect: PropTypes.func,
+  onSuggestions: PropTypes.func,
   searchOptions: PropTypes.shape({
     bounds: PropTypes.object,
-    componentRestrictions: PropTypes.object,
+    // componentRestrictions: PropTypes.object,
     location: PropTypes.object,
     offset: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     radius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     types: PropTypes.array,
+    region: PropTypes.string,
+    includedRegionCodes: PropTypes.arrayOf(PropTypes.string),
+    fields: PropTypes.arrayOf(PropTypes.string),
+    inputOffset: PropTypes.arrayOf(PropTypes.string),
+    language: PropTypes.string,
+    locationBias: PropTypes.oneOfType([
+      { lat: PropTypes.number, lng: PropTypes.number },
+    ]),
   }),
   debounce: PropTypes.number,
   highlightFirstSuggestion: PropTypes.bool,

@@ -1,14 +1,16 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import PlacesAutocomplete from '../..';
-import { GEOCODE_RESULT } from './googlePayloads';
+import { GEOCODE_COORDS_RESULT, GEOCODE_RESULT } from './googlePayloads';
 
 class GeocoderMock {
-  geocode({ address, placeId }, callback) {
+  geocode({ address, placeId, location }, callback) {
     if (address) {
       this._geocodeAddress(address, callback);
     } else if (placeId) {
       this._geocodePlaceID(placeId, callback);
+    } else if (location) {
+      this._geocodeCoordinates(location.lat, location.lng, callback);
     } else {
       callback({}, 'ZERO_RESULTS');
     }
@@ -17,6 +19,14 @@ class GeocoderMock {
   _geocodeAddress(address, callback) {
     if (address.startsWith('San Francisco')) {
       callback(GEOCODE_RESULT['San Francisco'], 'OK');
+    } else {
+      callback([], 'ZERO_RESULTS');
+    }
+  }
+
+  _geocodeCoordinates(lat, lng, callback) {
+    if (lat === 43.1686272 && lng === -79.469774) {
+      callback(GEOCODE_COORDS_RESULT, 'OK');
     } else {
       callback([], 'ZERO_RESULTS');
     }
@@ -32,17 +42,19 @@ class GeocoderMock {
 }
 
 class AutocompleteServiceMock {
-  getPlacePredictions(_filters, callback) {
-    callback([], 'OK');
-  }
+  autocompleteService = {
+    // eslint-disable-next-line no-unused-vars
+    fetchAutocompleteSuggestions: _filters => {
+      return [];
+    },
+  };
 }
 
 export const setupGoogleMock = () => {
-  /*** Mock Google Maps JavaScript API ***/
-  const google = {
+  global.window.google = {
     maps: {
       places: {
-        AutocompleteService: AutocompleteServiceMock,
+        AutocompleteSuggestion: AutocompleteServiceMock,
         PlacesServiceStatus: {
           INVALID_REQUEST: 'INVALID_REQUEST',
           NOT_FOUND: 'NOT_FOUND',
@@ -65,7 +77,6 @@ export const setupGoogleMock = () => {
       },
     },
   };
-  global.window.google = google;
 };
 
 const DEFAULT_PROPS = {
@@ -75,11 +86,12 @@ const DEFAULT_PROPS = {
   debounce: 200,
   highlightFirstSuggestion: false,
   shouldFetchSuggestions: true,
+  searchOptions: {},
 };
 
 export const mountComponent = (props = {}) => {
   const _props = { ...DEFAULT_PROPS, ...props };
-  const wrapper = mount(
+  return mount(
     <PlacesAutocomplete {..._props}>
       {({ getInputProps, suggestions, getSuggestionItemProps }) => (
         <div>
@@ -103,5 +115,4 @@ export const mountComponent = (props = {}) => {
       )}
     </PlacesAutocomplete>
   );
-  return wrapper;
 };

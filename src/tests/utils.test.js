@@ -1,4 +1,8 @@
-import { geocodeByAddress, geocodeByPlaceId } from '../utils';
+import {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  geocodeByCoordinates,
+} from '../utils';
 import { setupGoogleMock } from './helpers/setup';
 
 beforeAll(() => {
@@ -31,4 +35,19 @@ describe('geocodeByPlaceId', () => {
   });
 });
 
+describe('geocodeByCoordinates', () => {
+  it('geocodes valid coordinates', () => {
+    expect.assertions(1);
+    return geocodeByCoordinates(43.1686272, -79.469774).then(results => {
+      expect(results[0]).toMatchSnapshot();
+    });
+  });
+
+  it('rejects invalid coordinates', () => {
+    expect.assertions(1);
+    return geocodeByCoordinates(1, -7).catch(error => {
+      expect(error).toBeDefined();
+    });
+  });
+});
 /* TODO: test getLatLng */

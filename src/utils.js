@@ -26,6 +26,23 @@ export const getLatLng = result => {
   });
 };
 
+export const geocodeByCoordinates = (lat, lng) => {
+  const geocoder = new window.google.maps.Geocoder();
+  const OK = window.google.maps.GeocoderStatus.OK;
+
+  return new Promise((resolve, reject) => {
+    geocoder.geocode(
+      { location: { lat: lat, lng: lng } },
+      (results, status) => {
+        if (status !== OK) {
+          reject(status);
+        }
+        resolve(results);
+      }
+    );
+  });
+};
+
 export const geocodeByPlaceId = placeId => {
   const geocoder = new window.google.maps.Geocoder();
   const OK = window.google.maps.GeocoderStatus.OK;
