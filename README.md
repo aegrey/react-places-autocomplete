@@ -8,6 +8,10 @@ A fork of the updated original package @joshtwc/react-places-autocomplete
 
 A React component to build a customized UI for Google Maps Places Autocomplete
 
+## IF FORKING
+
+Change/delete the .npmrc
+
 ### Demo
 
 Live demo: [hibiken.github.io/react-places-autocomplete/](https://hibiken.github.io/react-places-autocomplete/)
