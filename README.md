@@ -1,13 +1,10 @@
 [![MIT-License](https://img.shields.io/npm/l/react-places-autocomplete.svg?style=flat-square)]()
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/react-places-autocomplete/Lobby)
-[![Maintainers Wanted](https://img.shields.io/badge/maintainers-wanted-orange)](https://github.com/hibiken/react-places-autocomplete/issues/296#issuecomment-583764730)
-
-## We are looking for maintainers!
-In order to ensure active development going forward, we are looking for maintainers to join the project. [Please contact the project owner if you are interested.](https://github.com/hibiken/react-places-autocomplete/issues/296#issuecomment-583764730)
 
 # React Places Autocomplete
 
-
+An update to https://github.com/kenny-hibino/react-places-autocomplete that includes typing, updated packages, and additional functionality.
+A fork of the updated original package @joshtwc/react-places-autocomplete
 
 A React component to build a customized UI for Google Maps Places Autocomplete
 
@@ -29,13 +26,13 @@ Live demo: [hibiken.github.io/react-places-autocomplete/](https://hibiken.github
 To install the stable version
 
 ```sh
-npm install --save react-places-autocomplete
+npm install --save @argrey/react-places-autocomplete
 ```
 
 React component is exported as a default export
 
 ```js
-import PlacesAutocomplete from 'react-places-autocomplete';
+import PlacesAutocomplete from '@aegrey/react-places-autocomplete';
 ```
 
 utility functions are named exports
@@ -45,7 +42,7 @@ import {
   geocodeByAddress,
   geocodeByPlaceId,
   getLatLng,
-} from 'react-places-autocomplete';
+} from '@aegrey/react-places-autocomplete';
 ```
 
 ### Getting Started
@@ -182,10 +179,10 @@ Required: `true`
 This is where you render whatever you want to based on the state of `PlacesAutocomplete`.
 The function will take an object with the following keys.
 
-* `getInputProps` : function
-* `getSuggestionItemProps` : function
-* `loading` : boolean
-* `suggestions` : array
+- `getInputProps` : function
+- `getSuggestionItemProps` : function
+- `loading` : boolean
+- `suggestions` : array
 
 Simple example
 
@@ -319,9 +316,9 @@ Function takes `status` (string) and `clearSuggestions` (function) as parameters
 ```js
 // Log error status and clear dropdown when Google Maps API returns an error.
 const onError = (status, clearSuggestions) => {
-  console.log('Google Maps API returned error with status: ', status)
-  clearSuggestions()
-}
+  console.log('Google Maps API returned error with status: ', status);
+  clearSuggestions();
+};
 
 <PlacesAutocomplete
   value={this.state.value}
@@ -329,7 +326,7 @@ const onError = (status, clearSuggestions) => {
   onError={onError}
 >
   {/* Custom render function */}
-</PlacesAutocomplete>
+</PlacesAutocomplete>;
 ```
 
 <a name="searchOptions"></a>
@@ -416,7 +413,11 @@ If provided, component will initialize after the browser has finished downloadin
 Example:
 
 ```html
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=myCallbackFunc"></script>
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=myCallbackFunc"
+></script>
 ```
 
 Then, provide `googleCallbackName` prop to `PlacesAutocomplete`.
@@ -438,13 +439,16 @@ Example:
 
 ```html
 <script>
-window.myCallbackFunc = function() {
-  window.initOne && window.initOne();
-  window.initTwo && window.initTwo();
-}
+  window.myCallbackFunc = function () {
+    window.initOne && window.initOne();
+    window.initTwo && window.initTwo();
+  };
 </script>
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=myCallbackFunc"></script>
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=myCallbackFunc"
+></script>
 ```
 
 ```js
@@ -469,9 +473,9 @@ src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&c
 
 ## Utility Functions
 
-* [`geocodeByAddress`](#geocode-by-address)
-* [`geocodeByPlaceId`](#geocode-by-place-id)
-* [`getLatLng`](#get-lat-lng)
+- [`geocodeByAddress`](#geocode-by-address)
+- [`geocodeByPlaceId`](#geocode-by-place-id)
+- [`getLatLng`](#get-lat-lng)
 
 <a name="geocode-by-address"></a>
 
